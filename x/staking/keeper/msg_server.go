@@ -17,6 +17,13 @@ import (
 // StakingPowerUpgradeHeight defines the block height after which messages that
 // would impact staking power are no longer supported.
 const StakingPowerUpgradeHeight = 7603700
+//StaingPowerReverseHeight re-enables the creation of validators after this 
+//block height.  This has been computed as approximately July 30, 2022.  45 days from June 14
+//With an average of 7 second blocks, there are approximately 8.571 blocks per minute (60/7)
+//8.571 * 60 min * 24 hrs * 45 days = 555,428 blocks
+//current block height on June 14 is 8,066,486
+//projected block on July 30 is 8,066,486 + 555,428 = 8,621,914
+const StakingPowerReverseHeight = 8621914
 
 type msgServer struct {
 	Keeper
@@ -35,7 +42,7 @@ func (k msgServer) CreateValidator(goCtx context.Context, msg *types.MsgCreateVa
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	currHeight := ctx.BlockHeight()
-	if currHeight > StakingPowerUpgradeHeight {
+	if currHeight > StakingPowerUpgradeHeight && currHeight < StakingPowerReverseHeight {
 		return nil, sdkerrors.Wrapf(types.ErrMsgNotSupported, "message type %T is not supported at height %d", msg, currHeight)
 	}
 
@@ -197,11 +204,6 @@ func (k msgServer) EditValidator(goCtx context.Context, msg *types.MsgEditValida
 // Delegate defines a method for performing a delegation of coins from a delegator to a validator
 func (k msgServer) Delegate(goCtx context.Context, msg *types.MsgDelegate) (*types.MsgDelegateResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	currHeight := ctx.BlockHeight()
-	if currHeight > StakingPowerUpgradeHeight {
-		return nil, sdkerrors.Wrapf(types.ErrMsgNotSupported, "message type %T is not supported at height %d", msg, currHeight)
-	}
 
 	valAddr, valErr := sdk.ValAddressFromBech32(msg.ValidatorAddress)
 	if valErr != nil {
