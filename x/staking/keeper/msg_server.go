@@ -18,12 +18,12 @@ import (
 // would impact staking power are no longer supported.
 const StakingPowerUpgradeHeight = 7603700
 //StaingPowerReverseHeight re-enables the creation of validators after this 
-//block height.  This has been computed as approximately July 30, 2022.  45 days from June 14
+//block height.  This has been computed as approximately August 22, 2022.  68 days from June 15
 //With an average of 7 second blocks, there are approximately 8.571 blocks per minute (60/7)
-//8.571 * 60 min * 24 hrs * 45 days = 555,428 blocks
-//current block height on June 14 is 8,066,486
-//projected block on July 30 is 8,066,486 + 555,428 = 8,621,914
-const StakingPowerReverseHeight = 8621914
+//8.571 * 60 min * 24 hrs * 68 days = 839,272 blocks
+//current block height on June 15 is 8,066,486
+//projected block on August 22 is 8,066,486 + 839,272 = 8,905,758
+const StakingPowerReverseHeight = 8905758
 
 type msgServer struct {
 	Keeper
