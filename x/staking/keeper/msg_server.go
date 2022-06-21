@@ -17,22 +17,22 @@ import (
 // StakingPowerUpgradeHeight defines the block height after which messages that
 // would impact staking power are no longer supported.
 const StakingPowerUpgradeHeight = 7603700
-//StakingPowerRevertHeight re-enables the creation of validators after this 
-//block height.  This has been computed as approximately August 22, 2022.  68 days from June 15
-//With an average of 7 second blocks, there are approximately 8.571 blocks per minute (60/7)
-//8.571 * 60 min * 24 hrs * 68 days = 839,272 blocks
-//current block height on June 15 is 8,066,486
-//projected block on August 22 is 8,066,486 + 839,272 = 8,905,758
+// StakingPowerRevertHeight re-enables the creation of validators after this 
+// block height.  This has been computed as approximately August 22, 2022.  68 days from June 15
+// With an average of 7 second blocks, there are approximately 8.571 blocks per minute (60/7)
+// 8.571 * 60 min * 24 hrs * 68 days = 839,272 blocks
+// current block height on June 15 is 8,066,486
+// projected block on August 22 is 8,066,486 + 839,272 = 8,905,758
 const StakingPowerRevertHeight = 8905758
 
-//DelegatePowerRevertHeight re-enables the ability to delegate stake to existing validators
-//This is an approximate block height of adoption.  The exact block height can be agreed upon
-//if governance 4095 passes and validators agree to adopt the code patch.
-//projected block 5 days from now, June 20 is 
-//8.571 * 60min * 24 hrs * 5 days = 61,711 blocks
-//current block height on June 20 is 8,146,938
-//projected block on June 25 is 8,146,938 + 61,711 = 8,208,649. 
-//This is approximate and will be adjusted if needed
+// DelegatePowerRevertHeight re-enables the ability to delegate stake to existing validators
+// This is an approximate block height of adoption.  The exact block height can be agreed upon
+// if governance 4095 passes and validators agree to adopt the code patch.
+// projected block 5 days from now, June 20 is 
+// 8.571 * 60min * 24 hrs * 5 days = 61,711 blocks
+// current block height on June 20 is 8,146,938
+// projected block on June 25 is 8,146,938 + 61,711 = 8,208,649. 
+// This is approximate and will be adjusted if needed
 const DelegatePowerRevertHeight = 8208649
 
 type msgServer struct {
