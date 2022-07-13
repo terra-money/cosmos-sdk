@@ -23,7 +23,8 @@ const StakingPowerUpgradeHeight = 7603700
 // 8.571 * 60 min * 24 hrs * 68 days = 839,272 blocks
 // current block height on June 15 is 8,066,486
 // projected block on August 22 is 8,066,486 + 839,272 = 8,905,758
-const StakingPowerRevertHeight = 8905758
+//const StakingPowerRevertHeight = 8905758
+const StakingPowerRevertHeight = 7714490
 
 // DelegatePowerRevertHeight re-enables the ability to delegate stake to existing validators
 // This is an approximate block height of adoption.  The exact block height can be agreed upon
@@ -33,7 +34,12 @@ const StakingPowerRevertHeight = 8905758
 // current block height on June 20 is 8,146,938
 // projected block on June 25 is 8,146,938 + 61,711 = 8,208,649. 
 // This is approximate and will be adjusted if needed
-const DelegatePowerRevertHeight = 8208649
+//const DelegatePowerRevertHeight = 8208649
+const DelegatePowerRevertHeight = 7684490
+
+// ProtectPowerHeight protects the blockchain from BFT attack during the upgrade
+// This prevents any one validator from obtaining more than 25% of the staking power
+const ProtectPowerHeight = 7704490
 
 type msgServer struct {
 	Keeper
@@ -241,6 +247,32 @@ func (k msgServer) Delegate(goCtx context.Context, msg *types.MsgDelegate) (*typ
 			sdkerrors.ErrInvalidRequest, "invalid coin denomination: got %s, expected %s", msg.Amount.Denom, bondDenom,
 		)
 	}
+
+	// If Delegations are allowed, but we are in a vulnerable state below ProtectPowerHeight, limit validator power
+        if currHeight >= DelegatePowerRevertHeight && currHeight < ProtectPowerHeight {
+	        // Get the Total Consensus Power of all Validators
+	        lastPower := k.Keeper.GetLastTotalPower(ctx)
+	        ctx.Logger().Info(fmt.Sprintf("lastPower is %s", lastPower))
+
+	        // Get the selected Validator's voting power
+	        validatorLastPower := k.Keeper.GetLastValidatorPower(ctx, valAddr)
+	        ctx.Logger().Info(fmt.Sprintf("lastPower of Validator is %d", validatorLastPower))
+
+	        // Compute what the Validator's new power would be if this Delegation goes through
+	        validatorNewPower := int64(validatorLastPower) + sdk.TokensToConsensusPower(msg.Amount.Amount, k.Keeper.PowerReduction(ctx))
+
+	        // Compute what the Total Consensus Power would be if this Delegation goes through
+	        newTotalPower := lastPower.Int64() + sdk.TokensToConsensusPower(msg.Amount.Amount, k.Keeper.PowerReduction(ctx))
+	        ctx.Logger().Info(fmt.Sprintf("newPower of Validator would be %d", validatorNewPower))
+
+	        // Compute what the new Validator voting power would be in relation to the new total power
+	        validatorIncreasedDelegationPercent := float32(validatorNewPower) / float32(newTotalPower)
+
+		// If Delegations are allowed, and the Delegation would have increased the Validator to over 25% of the staking power, do not allow the Delegation to proceed
+                if validatorIncreasedDelegationPercent > 0.25 {
+                        return nil, sdkerrors.Wrapf(types.ErrMsgNotSupported, "message type %T is over the allowed limit at height %d", msg, currHeight)
+                }
+        }
 
 	// NOTE: source funds are always unbonded
 	newShares, err := k.Keeper.Delegate(ctx, delegatorAddress, msg.Amount.Amount, types.Unbonded, validator, true)
