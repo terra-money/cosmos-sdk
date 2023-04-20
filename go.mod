@@ -27,7 +27,7 @@ require (
 	github.com/jhump/protoreflect v1.13.1-0.20220928232736-101791cb1b4c
 	github.com/magiconair/properties v1.8.6
 	github.com/mattn/go-isatty v0.0.16
-	github.com/otiai10/copy v1.6.0
+	github.com/otiai10/copy v1.11.0
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.12.2
 	github.com/prometheus/common v0.34.0
