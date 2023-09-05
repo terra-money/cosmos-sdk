@@ -48,7 +48,7 @@ require (
 	github.com/spf13/viper v1.13.0
 	github.com/stretchr/testify v1.8.2
 	github.com/tendermint/go-amino v0.16.0
-	github.com/tendermint/tendermint v0.34.28
+	github.com/tendermint/tendermint v0.34.29
 	github.com/tendermint/tm-db v0.6.7
 	github.com/tidwall/btree v1.5.0
 	golang.org/x/crypto v0.7.0
@@ -76,6 +76,7 @@ require (
 	github.com/cenkalti/backoff/v4 v4.1.3 // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
+	github.com/cometbft/cometbft-db v0.7.0 // indirect
 	github.com/cosmos/gorocksdb v1.2.0 // indirect
 	github.com/creachadair/taskgroup v0.3.2 // indirect
 	github.com/danieljoos/wincred v1.1.2 // indirect
@@ -139,6 +140,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
 	github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7 // indirect
+	github.com/tecbot/gorocksdb v0.0.0-20191217155057-f0fad39f321c // indirect
 	github.com/ulikunitz/xz v0.5.8 // indirect
 	github.com/zondax/hid v0.9.1 // indirect
 	github.com/zondax/ledger-go v0.14.1 // indirect
@@ -172,8 +174,8 @@ replace (
 	github.com/jhump/protoreflect => github.com/jhump/protoreflect v1.9.0
 	// replace broken goleveldb.
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
-	// use a modified fork of cometbft that uses tm-db instead of cometbft-db
-	github.com/tendermint/tendermint => github.com/terra-money/tendermint v0.34.27-terra.rc.1
+	// use cometbft
+	github.com/tendermint/tendermint => github.com/cometbft/cometbft v0.34.29
 )
 
 retract (
