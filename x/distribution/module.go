@@ -254,6 +254,7 @@ func ProvideModule(in DistrInputs) DistrOutputs {
 		in.StakingKeeper,
 		feeCollectorName,
 		authority.String(),
+		in.LegacySubspace,
 	)
 
 	m := NewAppModule(in.Cdc, k, in.AccountKeeper, in.BankKeeper, in.StakingKeeper, in.LegacySubspace)
