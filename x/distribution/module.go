@@ -223,7 +223,7 @@ type DistrInputs struct {
 	StakingKeeper types.StakingKeeper
 
 	// LegacySubspace is used solely for migration of x/params managed parameters
-	LegacySubspace exported.Subspace `optional:"true"`
+	LegacySubspace exported.Subspace
 }
 
 type DistrOutputs struct {
