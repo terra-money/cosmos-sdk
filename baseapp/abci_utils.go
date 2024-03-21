@@ -1,11 +1,15 @@
 package baseapp
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"github.com/cockroachdb/errors"
 	abci "github.com/cometbft/cometbft/abci/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/mempool"
+	"github.com/cosmos/cosmos-sdk/x/auth/signing"
 )
 
 type (
@@ -93,8 +97,40 @@ func (h *DefaultProposalHandler) PrepareProposalHandler() sdk.PrepareProposalHan
 		}
 
 		iterator := h.mempool.Select(ctx, req.Txs)
+		selectedTxsSignersSeqs := make(map[string]uint64)
+		var selectedTxsNums int
 		for iterator != nil {
 			memTx := iterator.Tx()
+			sigs, err := memTx.(signing.SigVerifiableTx).GetSignaturesV2()
+			if err != nil {
+				panic(fmt.Errorf("failed to get signatures: %w", err))
+			}
+
+			// If the signers aren't in selectedTxsSignersSeqs then we haven't seen them before
+			// so we add them and continue given that we don't need to check the sequence.
+			shouldAdd := true
+			txSignersSeqs := make(map[string]uint64)
+			for _, sig := range sigs {
+				signer := sdk.AccAddress(sig.PubKey.Address()).String()
+				seq, ok := selectedTxsSignersSeqs[signer]
+				if !ok {
+					txSignersSeqs[signer] = sig.Sequence
+					continue
+				}
+
+				// If we have seen this signer before in this block, we must make
+				// sure that the current sequence is seq+1; otherwise is invalid
+				// and we skip it.
+				if seq+1 != sig.Sequence {
+					shouldAdd = false
+					break
+				}
+				txSignersSeqs[signer] = sig.Sequence
+			}
+			if !shouldAdd {
+				iterator = iterator.Next()
+				continue
+			}
 
 			// NOTE: Since transaction verification was already executed in CheckTx,
 			// which calls mempool.Insert, in theory everything in the pool should be
@@ -111,6 +147,23 @@ func (h *DefaultProposalHandler) PrepareProposalHandler() sdk.PrepareProposalHan
 				if stop {
 					break
 				}
+
+				txsLen := len(h.txSelector.SelectedTxs())
+				for sender, seq := range txSignersSeqs {
+					// If txsLen != selectedTxsNums is true, it means that we've
+					// added a new tx to the selected txs, so we need to update
+					// the sequence of the sender.
+					if txsLen != selectedTxsNums {
+						selectedTxsSignersSeqs[sender] = seq
+					} else if _, ok := selectedTxsSignersSeqs[sender]; !ok {
+						// The transaction hasn't been added but it passed the
+						// verification, so we know that the sequence is correct.
+						// So we set this sender's sequence to seq-1, in order
+						// to avoid unnecessary calls to PrepareProposalVerifyTx.
+						selectedTxsSignersSeqs[sender] = seq - 1
+					}
+				}
+				selectedTxsNums = txsLen
 			}
 
 			iterator = iterator.Next()
@@ -147,10 +200,13 @@ func (h *DefaultProposalHandler) ProcessProposalHandler() sdk.ProcessProposalHan
 			maxBlockGas = b.MaxGas
 		}
 
-		for _, txBytes := range req.Txs {
+		for i, txBytes := range req.Txs {
 			tx, err := h.txVerifier.ProcessProposalVerifyTx(txBytes)
 			if err != nil {
-				ctx.Logger().Error("proposal failed on ProcessProposalVerifyTx", "error", err)
+				proposal, err := json.Marshal(req)
+				if err == nil {
+					ctx.Logger().Error("proposal failed on ProcessProposalVerifyTx", "error", err, "proposal", string(proposal), "tx_index", i)
+				}
 				return abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}
 			}
 
@@ -161,6 +217,10 @@ func (h *DefaultProposalHandler) ProcessProposalHandler() sdk.ProcessProposalHan
 				}
 
 				if totalTxGas > uint64(maxBlockGas) {
+					proposal, err := json.Marshal(req)
+					if err == nil {
+						ctx.Logger().Error("proposal failed on ProcessProposalVerifyTx", "error", err, "proposal", string(proposal), "tx_index", i)
+					}
 					ctx.Logger().Error("proposal failed on totalTxGas > maxBlockGas", "totalTxGas", totalTxGas, "maxBlockGas", maxBlockGas)
 					return abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}
 				}
