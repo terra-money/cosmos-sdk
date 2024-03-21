@@ -1,6 +1,7 @@
 package baseapp
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/cockroachdb/errors"
@@ -199,10 +200,13 @@ func (h *DefaultProposalHandler) ProcessProposalHandler() sdk.ProcessProposalHan
 			maxBlockGas = b.MaxGas
 		}
 
-		for _, txBytes := range req.Txs {
+		for i, txBytes := range req.Txs {
 			tx, err := h.txVerifier.ProcessProposalVerifyTx(txBytes)
 			if err != nil {
-				ctx.Logger().Error("proposal failed on ProcessProposalVerifyTx", "error", err)
+				proposal, err := json.Marshal(req)
+				if err == nil {
+					ctx.Logger().Error("proposal failed on ProcessProposalVerifyTx", "error", err, "proposal", string(proposal), "tx_index", i)
+				}
 				return abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}
 			}
 
@@ -213,6 +217,10 @@ func (h *DefaultProposalHandler) ProcessProposalHandler() sdk.ProcessProposalHan
 				}
 
 				if totalTxGas > uint64(maxBlockGas) {
+					proposal, err := json.Marshal(req)
+					if err == nil {
+						ctx.Logger().Error("proposal failed on ProcessProposalVerifyTx", "error", err, "proposal", string(proposal), "tx_index", i)
+					}
 					ctx.Logger().Error("proposal failed on totalTxGas > maxBlockGas", "totalTxGas", totalTxGas, "maxBlockGas", maxBlockGas)
 					return abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}
 				}
