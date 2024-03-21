@@ -150,6 +150,7 @@ func (h *DefaultProposalHandler) ProcessProposalHandler() sdk.ProcessProposalHan
 		for _, txBytes := range req.Txs {
 			tx, err := h.txVerifier.ProcessProposalVerifyTx(txBytes)
 			if err != nil {
+				ctx.Logger().Error("proposal failed on ProcessProposalVerifyTx", "error", err)
 				return abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}
 			}
 
@@ -160,6 +161,7 @@ func (h *DefaultProposalHandler) ProcessProposalHandler() sdk.ProcessProposalHan
 				}
 
 				if totalTxGas > uint64(maxBlockGas) {
+					ctx.Logger().Error("proposal failed on totalTxGas > maxBlockGas", "totalTxGas", totalTxGas, "maxBlockGas", maxBlockGas)
 					return abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}
 				}
 			}
