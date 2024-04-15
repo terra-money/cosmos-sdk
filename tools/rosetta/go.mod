@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	cosmossdk.io/math v1.3.0
-	github.com/btcsuite/btcd/btcec/v2 v2.3.2
+	github.com/btcsuite/btcd/btcec/v2 v2.3.3
 	github.com/coinbase/rosetta-sdk-go/types v1.0.0
 	github.com/cometbft/cometbft v0.37.4
 	github.com/cosmos/cosmos-sdk v0.47.0-rc3
