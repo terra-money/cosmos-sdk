@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/cosmos/cosmos-sdk v0.47.0-rc3
-	github.com/hashicorp/go-getter v1.7.0
+	github.com/hashicorp/go-getter v1.7.4
 	github.com/otiai10/copy v1.7.0
 	github.com/rs/zerolog v1.28.0
 	github.com/spf13/cobra v1.6.1
