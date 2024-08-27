@@ -16,7 +16,7 @@ require (
 	github.com/btcsuite/btcd/btcec/v2 v2.3.2
 	github.com/chzyer/readline v1.5.1
 	github.com/cockroachdb/apd/v2 v2.0.2
-	github.com/cockroachdb/errors v1.10.0
+	github.com/cockroachdb/errors v1.11.3
 	github.com/cometbft/cometbft v0.37.4
 	github.com/cometbft/cometbft-db v0.7.0
 	github.com/confio/ics23/go v0.9.0
@@ -56,12 +56,12 @@ require (
 	github.com/stretchr/testify v1.8.4
 	github.com/tendermint/go-amino v0.16.0
 	github.com/tidwall/btree v1.6.0
-	golang.org/x/crypto v0.16.0
+	golang.org/x/crypto v0.21.0
 	golang.org/x/exp v0.0.0-20230711153332-06a737ee72cb
 	golang.org/x/sync v0.4.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20231212172506-995d672761c0
 	google.golang.org/grpc v1.60.1
-	google.golang.org/protobuf v1.32.0
+	google.golang.org/protobuf v1.33.0
 	gotest.tools/v3 v3.5.1
 	pgregory.net/rapid v1.1.0
 	sigs.k8s.io/yaml v1.4.0
@@ -99,7 +99,7 @@ require (
 	github.com/dvsekhvalnov/jose2go v1.6.0 // indirect
 	github.com/felixge/httpsnoop v1.0.2 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
-	github.com/getsentry/sentry-go v0.23.0 // indirect
+	github.com/getsentry/sentry-go v0.27.0 // indirect
 	github.com/go-kit/kit v0.12.0 // indirect
 	github.com/go-kit/log v0.2.1 // indirect
 	github.com/go-logfmt/logfmt v0.5.1 // indirect
@@ -168,10 +168,10 @@ require (
 	go.opentelemetry.io/otel v1.19.0 // indirect
 	go.opentelemetry.io/otel/metric v1.19.0 // indirect
 	go.opentelemetry.io/otel/trace v1.19.0 // indirect
-	golang.org/x/net v0.19.0 // indirect
+	golang.org/x/net v0.23.0 // indirect
 	golang.org/x/oauth2 v0.13.0 // indirect
-	golang.org/x/sys v0.16.0 // indirect
-	golang.org/x/term v0.15.0 // indirect
+	golang.org/x/sys v0.18.0 // indirect
+	golang.org/x/term v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/api v0.149.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
