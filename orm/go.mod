@@ -11,7 +11,7 @@ require (
 	github.com/google/go-cmp v0.6.0
 	github.com/iancoleman/strcase v0.2.0
 	github.com/regen-network/gocuke v0.6.2
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.10.0
 	golang.org/x/exp v0.0.0-20230131160201-f062dba9d201
 	google.golang.org/grpc v1.60.1
 	google.golang.org/protobuf v1.32.0
