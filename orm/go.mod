@@ -11,7 +11,7 @@ require (
 	github.com/google/go-cmp v0.6.0
 	github.com/iancoleman/strcase v0.2.0
 	github.com/regen-network/gocuke v0.6.2
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.12.1
 	golang.org/x/exp v0.0.0-20230131160201-f062dba9d201
 	google.golang.org/grpc v1.60.1
 	google.golang.org/protobuf v1.32.0
@@ -27,7 +27,6 @@ require (
 	github.com/cosmos/gogoproto v1.4.10 // indirect
 	github.com/cucumber/common/gherkin/go/v22 v22.0.0 // indirect
 	github.com/cucumber/common/messages/go/v17 v17.1.1 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgraph-io/badger/v2 v2.2007.4 // indirect
 	github.com/dgraph-io/ristretto v0.1.0 // indirect
 	github.com/dgryski/go-farm v0.0.0-20200201041132-a6ae2369ad13 // indirect
@@ -43,20 +42,18 @@ require (
 	github.com/google/btree v1.1.2 // indirect
 	github.com/jmhodges/levigo v1.0.0 // indirect
 	github.com/klauspost/compress v1.15.11 // indirect
-	github.com/kr/text v0.2.0 // indirect
 	github.com/lib/pq v1.10.7 // indirect
 	github.com/onsi/ginkgo v1.16.4 // indirect
 	github.com/onsi/gomega v1.20.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7 // indirect
 	github.com/tecbot/gorocksdb v0.0.0-20191217155057-f0fad39f321c // indirect
 	go.etcd.io/bbolt v1.3.6 // indirect
+	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/net v0.19.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/genproto v0.0.0-20240102182953-50ed04b92917 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20231212172506-995d672761c0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240108191215-35c7eff3a6b1 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
